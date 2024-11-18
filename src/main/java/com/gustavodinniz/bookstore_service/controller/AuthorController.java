@@ -1,14 +1,12 @@
 package com.gustavodinniz.bookstore_service.controller;
 
 import com.gustavodinniz.bookstore_service.model.dto.request.CreateAuthorRequest;
+import com.gustavodinniz.bookstore_service.model.dto.response.GetAuthorByIdResponse;
 import com.gustavodinniz.bookstore_service.service.AuthorService;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 @RestController
@@ -19,13 +17,20 @@ public class AuthorController {
     private AuthorService authorService;
 
     @PostMapping
-    public ResponseEntity<Void> createAuthor(@RequestBody CreateAuthorRequest createAuthorRequest) {
-        var author = authorService.createAuthor(createAuthorRequest);
+    @ResponseStatus(HttpStatus.CREATED)
+    public void createAuthor(@RequestBody CreateAuthorRequest createAuthorRequest, HttpServletResponse response) {
+        var uuid = authorService.createAuthor(createAuthorRequest);
         var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()
                 .path("/{id}")
-                .buildAndExpand(author.getId())
+                .buildAndExpand(uuid)
                 .toUri();
-        return ResponseEntity.created(location).build();
+        response.addHeader("location", location.toString());
+    }
+
+    @GetMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public GetAuthorByIdResponse getAuthorById(@PathVariable String id) {
+        return authorService.getAuthorById(id);
     }
 }
