@@ -33,4 +33,10 @@ public class AuthorController {
     public GetAuthorByIdResponse getAuthorById(@PathVariable String id) {
         return authorService.getAuthorById(id);
     }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void deleteAuthor(@PathVariable String id) {
+        authorService.deleteAuthor(id);
+    }
 }

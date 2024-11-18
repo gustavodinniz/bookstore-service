@@ -7,7 +7,6 @@ import com.gustavodinniz.bookstore_service.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -20,7 +19,7 @@ public class AuthorService {
     private AuthorRepository authorRepository;
 
     public UUID createAuthor(CreateAuthorRequest createAuthorRequest) {
-        log.info("Creating author: {}", createAuthorRequest.name());
+        log.error("Starting operation to create author: {}", createAuthorRequest.name());
         var author = createAuthorRequest.toAuthor();
         authorRepository.save(author);
         log.info("Author created with ID: {}", author.getId());
@@ -41,7 +40,14 @@ public class AuthorService {
                 });
     }
 
-    private  UUID validadeUUID(String id) {
+    public void deleteAuthor(String id) {
+        log.info("Starting operation to delete author by ID: {}", id);
+        var authorId = validadeUUID(id);
+        authorRepository.deleteById(authorId);
+        log.info("Author deleted for ID: {}", id);
+    }
+
+    private UUID validadeUUID(String id) {
         UUID authorId;
         try {
             authorId = UUID.fromString(id);
@@ -51,4 +57,6 @@ public class AuthorService {
         }
         return authorId;
     }
+
+
 }
