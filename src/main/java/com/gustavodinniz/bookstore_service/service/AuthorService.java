@@ -1,14 +1,18 @@
 package com.gustavodinniz.bookstore_service.service;
 
 import com.gustavodinniz.bookstore_service.exception.AuthorNotFoundException;
+import com.gustavodinniz.bookstore_service.model.Author;
 import com.gustavodinniz.bookstore_service.model.dto.request.CreateAuthorRequest;
 import com.gustavodinniz.bookstore_service.model.dto.response.GetAuthorByIdResponse;
 import com.gustavodinniz.bookstore_service.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -19,7 +23,7 @@ public class AuthorService {
     private AuthorRepository authorRepository;
 
     public UUID createAuthor(CreateAuthorRequest createAuthorRequest) {
-        log.error("Starting operation to create author: {}", createAuthorRequest.name());
+        log.info("Starting operation to create author: {}", createAuthorRequest.name());
         var author = createAuthorRequest.toAuthor();
         authorRepository.save(author);
         log.info("Author created with ID: {}", author.getId());
@@ -59,4 +63,24 @@ public class AuthorService {
     }
 
 
+    public List<GetAuthorByIdResponse> getAuthorsByFilters(String name, String nationality) {
+        log.info("Starting operation to get authors by filters: {}, {}", name, nationality);
+        var author = new Author();
+        author.setName(name);
+        author.setNationality(nationality);
+
+        var matcher = ExampleMatcher.matching()
+                .withIgnorePaths("id", "birthDate")
+                .withIgnoreNullValues()
+                .withIgnoreCase()
+                .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING);
+
+        var authorExample = Example.of(author, matcher);
+        var authors = authorRepository.findAll(authorExample)
+                .stream()
+                .map(GetAuthorByIdResponse::valueOf)
+                .toList();
+        log.info("Authors found by filters. Size: {}", authors.size());
+        return authors;
+    }
 }

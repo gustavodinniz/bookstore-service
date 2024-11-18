@@ -9,6 +9,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.util.List;
+
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/v1/authors")
@@ -38,5 +40,12 @@ public class AuthorController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void deleteAuthor(@PathVariable String id) {
         authorService.deleteAuthor(id);
+    }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<GetAuthorByIdResponse> getAuthorsByFilters(@RequestParam(value = "name", required = false) String name,
+                                                           @RequestParam(value = "nationality", required = false) String nationality) {
+        return authorService.getAuthorsByFilters(name, nationality);
     }
 }
