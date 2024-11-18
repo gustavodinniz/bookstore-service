@@ -1,5 +1,6 @@
-package com.gustavodinniz.bookstore_service.exception;
+package com.gustavodinniz.bookstore_service.controller;
 
+import com.gustavodinniz.bookstore_service.exception.AuthorNotFoundException;
 import com.gustavodinniz.bookstore_service.model.dto.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
