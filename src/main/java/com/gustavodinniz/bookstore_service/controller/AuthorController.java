@@ -5,7 +5,8 @@ import com.gustavodinniz.bookstore_service.model.dto.request.UpdateAuthorRequest
 import com.gustavodinniz.bookstore_service.model.dto.response.GetAuthorByIdResponse;
 import com.gustavodinniz.bookstore_service.service.AuthorService;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
+import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -13,15 +14,15 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
 
 @RestController
-@AllArgsConstructor
+@RequiredArgsConstructor
 @RequestMapping("/api/v1/authors")
 public class AuthorController {
 
-    private AuthorService authorService;
+    private final AuthorService authorService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public void createAuthor(@RequestBody CreateAuthorRequest createAuthorRequest, HttpServletResponse response) {
+    public void createAuthor(@RequestBody @Valid CreateAuthorRequest createAuthorRequest, HttpServletResponse response) {
         var uuid = authorService.createAuthor(createAuthorRequest);
         var location = ServletUriComponentsBuilder
                 .fromCurrentRequest()

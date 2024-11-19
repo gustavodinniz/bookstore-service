@@ -7,8 +7,8 @@ import com.gustavodinniz.bookstore_service.model.dto.request.CreateAuthorRequest
 import com.gustavodinniz.bookstore_service.model.dto.request.UpdateAuthorRequest;
 import com.gustavodinniz.bookstore_service.model.dto.response.GetAuthorByIdResponse;
 import com.gustavodinniz.bookstore_service.repository.AuthorRepository;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
@@ -20,10 +20,10 @@ import java.util.UUID;
 
 @Slf4j
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class AuthorService {
 
-    private AuthorRepository authorRepository;
+    private final AuthorRepository authorRepository;
 
     public UUID createAuthor(CreateAuthorRequest createAuthorRequest) {
         log.info("Starting operation to create author: {}", createAuthorRequest.name());
