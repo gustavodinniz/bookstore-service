@@ -1,6 +1,7 @@
 package com.gustavodinniz.bookstore_service.service;
 
 import com.gustavodinniz.bookstore_service.exception.AuthorNotFoundException;
+import com.gustavodinniz.bookstore_service.exception.InvalidUuidFormatException;
 import com.gustavodinniz.bookstore_service.model.Author;
 import com.gustavodinniz.bookstore_service.model.dto.request.CreateAuthorRequest;
 import com.gustavodinniz.bookstore_service.model.dto.request.UpdateAuthorRequest;
@@ -59,7 +60,7 @@ public class AuthorService {
             authorId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             log.error("Invalid UUID format for ID: {}", id, e);
-            throw new IllegalArgumentException("Invalid ID format. Expected UUID.");
+            throw new InvalidUuidFormatException("Invalid ID format. Expected UUID.");
         }
         return authorId;
     }

@@ -1,6 +1,7 @@
 package com.gustavodinniz.bookstore_service.controller;
 
 import com.gustavodinniz.bookstore_service.exception.AuthorNotFoundException;
+import com.gustavodinniz.bookstore_service.exception.InvalidUuidFormatException;
 import com.gustavodinniz.bookstore_service.model.dto.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,8 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ErrorResponse handleIllegalArgumentException(IllegalArgumentException e) {
+    @ExceptionHandler(InvalidUuidFormatException.class)
+    public ErrorResponse handleInvalidUuidException(InvalidUuidFormatException e) {
         return ErrorResponse.defaultResponse(e.getMessage());
     }
 }
