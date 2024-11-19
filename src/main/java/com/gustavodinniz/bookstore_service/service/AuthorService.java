@@ -60,7 +60,7 @@ public class AuthorService {
             authorId = UUID.fromString(id);
         } catch (IllegalArgumentException e) {
             log.error("Invalid UUID format for ID: {}", id, e);
-            throw new InvalidUuidFormatException("Invalid ID format. Expected UUID.");
+            throw new InvalidUuidFormatException("400.004");
         }
         return authorId;
     }

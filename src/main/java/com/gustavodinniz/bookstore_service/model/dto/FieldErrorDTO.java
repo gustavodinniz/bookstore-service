@@ -1,4 +1,4 @@
 package com.gustavodinniz.bookstore_service.model.dto;
 
-public record FieldErrorDTO(String field, String error) {
+public record FieldErrorDTO(String field, String code, String message) {
 }

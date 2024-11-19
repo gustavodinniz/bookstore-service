@@ -1,6 +1,8 @@
 spring:
   application:
     name: BookstoreService
+  messages:
+    basename: messages
   datasource:
     url: jdbc:postgresql://localhost:5432/bookstore
     username: postgres
