@@ -1,6 +1,7 @@
 package com.gustavodinniz.bookstore_service.controller;
 
 import com.gustavodinniz.bookstore_service.model.dto.request.CreateAuthorRequest;
+import com.gustavodinniz.bookstore_service.model.dto.request.UpdateAuthorRequest;
 import com.gustavodinniz.bookstore_service.model.dto.response.GetAuthorByIdResponse;
 import com.gustavodinniz.bookstore_service.service.AuthorService;
 import jakarta.servlet.http.HttpServletResponse;
@@ -47,5 +48,10 @@ public class AuthorController {
     public List<GetAuthorByIdResponse> getAuthorsByFilters(@RequestParam(value = "name", required = false) String name,
                                                            @RequestParam(value = "nationality", required = false) String nationality) {
         return authorService.getAuthorsByFilters(name, nationality);
+    }
+
+    @PutMapping("/{id}")
+    public void updateAuthor(@PathVariable String id, @RequestBody UpdateAuthorRequest createAuthorRequest) {
+        authorService.updateAuthor(id, createAuthorRequest);
     }
 }

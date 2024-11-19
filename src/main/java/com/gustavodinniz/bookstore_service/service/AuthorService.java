@@ -3,6 +3,7 @@ package com.gustavodinniz.bookstore_service.service;
 import com.gustavodinniz.bookstore_service.exception.AuthorNotFoundException;
 import com.gustavodinniz.bookstore_service.model.Author;
 import com.gustavodinniz.bookstore_service.model.dto.request.CreateAuthorRequest;
+import com.gustavodinniz.bookstore_service.model.dto.request.UpdateAuthorRequest;
 import com.gustavodinniz.bookstore_service.model.dto.response.GetAuthorByIdResponse;
 import com.gustavodinniz.bookstore_service.repository.AuthorRepository;
 import lombok.AllArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Slf4j
@@ -82,5 +84,22 @@ public class AuthorService {
                 .toList();
         log.info("Authors found by filters. Size: {}", authors.size());
         return authors;
+    }
+
+    public void updateAuthor(String id, UpdateAuthorRequest createAuthorRequest) {
+        log.info("Starting operation to update author by ID: {}", id);
+        var authorId = validadeUUID(id);
+        authorRepository.findById(authorId)
+                .ifPresentOrElse(author -> {
+                    log.info("Author found for ID: {}", id);
+                    author.setName(Optional.ofNullable(createAuthorRequest.name()).orElse(author.getName()));
+                    author.setBirthDate(Optional.ofNullable(createAuthorRequest.birthDate()).orElse(author.getBirthDate()));
+                    author.setNationality(Optional.ofNullable(createAuthorRequest.nationality()).orElse(author.getNationality()));
+                    authorRepository.save(author);
+                    log.info("Author updated for ID: {}", id);
+                }, () -> {
+                    log.warn("No author found for ID: {}", id);
+                    throw new AuthorNotFoundException("Author not found for ID: " + id);
+                });
     }
 }
