@@ -2,16 +2,38 @@ package com.gustavodinniz.bookstore_service.controller;
 
 import com.gustavodinniz.bookstore_service.exception.AuthorNotFoundException;
 import com.gustavodinniz.bookstore_service.exception.InvalidUuidFormatException;
+import com.gustavodinniz.bookstore_service.model.dto.FieldErrorDTO;
 import com.gustavodinniz.bookstore_service.model.dto.response.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.FieldError;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.List;
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ErrorResponse handleMethodArgumentNotValidException(MethodArgumentNotValidException e){
+        log.error("Error when validating fields: {} ", e.getMessage());
+        List<FieldError> fieldErrors = e.getFieldErrors();
+        List<FieldErrorDTO> errors = fieldErrors
+                .stream()
+                .map(fe -> new FieldErrorDTO(fe.getField(), fe.getDefaultMessage()))
+                .toList();
+        return ErrorResponse.builder()
+                .status(HttpStatus.BAD_REQUEST.value())
+                .message("Error when validating fields.")
+                .errors(errors)
+                .build();
+    }
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(AuthorNotFoundException.class)

@@ -1,13 +1,15 @@
 package com.gustavodinniz.bookstore_service.model.dto.request;
 
 import com.gustavodinniz.bookstore_service.model.Author;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 
 public record CreateAuthorRequest(
-        String name,
-        LocalDate birthDate,
-        String nationality
+        @NotBlank String name,
+        @NotNull LocalDate birthDate,
+        @NotBlank String nationality
 ) {
 
     public Author toAuthor() {
