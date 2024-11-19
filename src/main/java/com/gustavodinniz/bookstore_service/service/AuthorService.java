@@ -43,7 +43,7 @@ public class AuthorService {
                 })
                 .orElseThrow(() -> {
                     log.warn("No author found for ID: {}", id);
-                    return new AuthorNotFoundException("Author not found for ID: " + id);
+                    return new AuthorNotFoundException("404.001");
                 });
     }
 
@@ -100,7 +100,7 @@ public class AuthorService {
                     log.info("Author updated for ID: {}", id);
                 }, () -> {
                     log.warn("No author found for ID: {}", id);
-                    throw new AuthorNotFoundException("Author not found for ID: " + id);
+                    throw new AuthorNotFoundException("404.001");
                 });
     }
 }

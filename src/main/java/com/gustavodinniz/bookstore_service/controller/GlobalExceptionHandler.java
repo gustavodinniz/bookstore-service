@@ -42,7 +42,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(AuthorNotFoundException.class)
     public ErrorResponse handleNotFoundException(AuthorNotFoundException e) {
-        return ErrorResponse.notFound(e.getMessage());
+        return ErrorResponse.defaultResponse(e.getMessage(), messageConfig.getMessage(e.getMessage()));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
