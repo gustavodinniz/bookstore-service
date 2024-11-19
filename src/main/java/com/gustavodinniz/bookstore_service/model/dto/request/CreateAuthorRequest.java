@@ -9,9 +9,14 @@ import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 
 public record CreateAuthorRequest(
-        @NotBlank(message = "400.001") @Size(max = 100, min = 2) String name,
-        @NotNull(message = "400.001") @Past LocalDate birthDate,
-        @NotBlank(message = "400.001") @Size(max = 50, min = 2) String nationality
+        @NotBlank(message = "400.001") @Size(max = 100, min = 2, message = "400.002")
+        String name,
+
+        @NotNull(message = "400.001") @Past(message = "400.003")
+        LocalDate birthDate,
+
+        @NotBlank(message = "400.001") @Size(max = 50, min = 2, message = "400.002")
+        String nationality
 ) {
 
     public Author toAuthor() {
